@@ -39,9 +39,8 @@ def parse_test(fichier):
     print('------ nb arretes ---------')
     return sommets_indices, arretes, sommets
 
-
-
 def parse_h2(filename):
+
     nodes = {}
     with open(filename, 'r') as f:
         lines = f.readlines()

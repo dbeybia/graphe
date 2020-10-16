@@ -36,6 +36,10 @@ def fastDistance(node1, node2): # distance without the sqrt, for fast comparison
     print(node2)
     return (node2[2] - node1[2])**2 + (node2[1] - node1[1])**2
 '''
+##################################################
+### execution de l'algorithme
+##################################################
+
 
 def main():
     if len(argv) > 1 and isfile(argv[1]):
@@ -43,8 +47,7 @@ def main():
             mst_kruskall = kruskall(list(range(len(sommets_indices))), arretes)
             print("test")
             print(mst_kruskall)
-            r = greedyRoute(sommets, len(sommets_indices))
-            print(r)
+            #print(r)
     else:
             print("Utilisiation : ", os.path.basename(__file__), " <fichier_test.tsp>")
 

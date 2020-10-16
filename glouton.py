@@ -18,13 +18,38 @@ def distance(path, nodes):
 def dist_euc(x1, y1, x2, y2):
 	return( sqrt( (x1-x2)**2 + (y1 - y2)**2))
 
-# exemple appel : sommets[i][1], sommets[i][2], sommets[j][1], sommets[j][2])] = (i, j)
+# Exemple appel : sommets[i][1], sommets[i][2], sommets[j][1], sommets[j][2])] = (i, j)
 def distanceEntre(f, t):
     return ((f['x'] - t['x'])**2 + (f['y'] - t['y'])**2)**0.5
 
 
-# Implementation h2
-# A changer avec sommets (structure normale) - n = sommets, 
+
+# Implementation h1 glouton
+def h1(n, nodes):
+    path = [n]
+    print(nodes)
+    toVisit = list(nodes.keys()) # liste des sommets
+    toVisit.remove(n) # supprimer element numero n
+    while len(toVisit) > 0:
+        m = 999999999
+        mIdx = -1
+        for target in toVisit:
+            print(nodes[target])
+            print(target)
+            dist = distanceEntre(nodes[target], nodes[path[-1]])
+            if dist < m:
+                m = dist
+                mIdx = target
+                print(mIdx)
+        toVisit.remove(mIdx)
+        path.append(mIdx)
+        print(path)
+    return path
+
+
+
+# Implementation h2 glouton
+# A changer avec sommets (structure normale) - n = sommets,
 def h2(n, nodes):
 
     path = n # liste
@@ -63,9 +88,8 @@ def h2(n, nodes):
     return path
 
 ##################################################
-
-
-# calcul nodes
+### execution de l'algorithme
+##################################################
 
 
 # execution de l'algorithme
