@@ -1,9 +1,14 @@
-from math import sqrt
+
+import math
+
 from sys import argv
 from os.path import isfile
 
+
+
+
 def dist_euc(x1, y1, x2, y2):
-	return( sqrt( (x1-x2)**2 + (y1 - y2)**2))
+	return(math.sqrt( (x1-x2)**2 + (y1 - y2)**2))
 
 
 def parse_test(fichier):
@@ -20,24 +25,25 @@ def parse_test(fichier):
 
     print (sommets)
 
-    dic_arretes = dict()
+    dic_arretes = {} # sommet, sommet, cout
     arretes = list() # début, fin, poids
     print('------ nb sommets ---------')
     print(len(sommets))
-    print('------ nb sommets ---------')
+
+
     # arretes
-    for i in range(1, len(sommets)):
+    for i in range(len(sommets)):
         for j in range(i):
             if i != j:
-                dic_arretes[dist_euc(sommets[i][1], sommets[i][2], sommets[j][1], sommets[j][2])] = (i, j)
+                dic_arretes [math.sqrt(dist_euc(sommets[i][1], sommets[i][2], sommets[j][1], sommets[j][2]))] = (i, j)
                 arretes.append([i, j, dist_euc(sommets[i][1], sommets[i][2], sommets[j][1], sommets[j][2])])
+
 
     sommets_indices = list(range(len(sommets)))
     #print(len(sommets_indices), len(sommets))
     print('------ nb arretes ---------')
     print(len(arretes))
-    print('------ nb arretes ---------')
-    return sommets_indices, arretes, sommets
+    return sommets_indices, arretes, sommets, dic_arretes
 
 def parse_h2(filename):
 

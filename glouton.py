@@ -1,5 +1,4 @@
 
-
 import sys, time, random
 from parse_tsp import parse_h2, parse_test
 
