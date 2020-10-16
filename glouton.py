@@ -13,7 +13,6 @@ def distance(path, nodes):
         dist += distanceEntre(nodes[cur], nodes[nxt])
     return dist
 
-
 # Distance entre deux nodes
 def dist_euc(x1, y1, x2, y2):
 	return( sqrt( (x1-x2)**2 + (y1 - y2)**2))
@@ -49,28 +48,20 @@ def h1(n, nodes):
 
 
 # Implementation h2 glouton
-# A changer avec sommets (structure normale) - n = sommets,
 def h2(n, nodes):
-
     path = n # liste
     path.append(n[0])
-
     print(path)
-
     toVisit = list(nodes.keys()) #
     print(toVisit)
-
     toVisit.remove(n[0])
     toVisit.remove(n[1])
-
     while len(toVisit) > 0:
         m = 999999999
         mIdx = -1
         for element in range(0, len(path) - 1):
             for target in toVisit:
-
                 dist = distanceEntre(nodes[target], nodes[path[element]])
-                #print(dist)
                 dist1 = distanceEntre(nodes[target], nodes[path[element+1]])
                 dist2 = distanceEntre(nodes[path[element]], nodes[path[element+1]])
 
@@ -84,15 +75,12 @@ def h2(n, nodes):
         #toVisit.remove(mIdx)
         #path.append(mIdx)
         toVisit.remove(mIdx)
-
     return path
 
 ##################################################
 ### execution de l'algorithme
 ##################################################
 
-
-# execution de l'algorithme
 def glouton(args = {"-l": True}):
     print("Algorithme glouton H2", args["-l"])
     tsp_file = sys.argv[1]
@@ -125,9 +113,7 @@ def glouton(args = {"-l": True}):
 
     #print(path)
     #print("Solution")
-
     #solution(path)
-
     # distance
     #print(dist)
 
