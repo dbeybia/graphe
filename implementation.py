@@ -39,8 +39,7 @@ class UnionFind:
 def deux_approximation(sommets,arretes, dic_arretes):
      n=len(sommets)
      tree = arpm(list(range(len(sommets))), arretes, dic_arretes)
-
-     print(tree)
+     #print(tree)
      adj = {}
      # liste adjacence
      for arrete in tree:
@@ -90,7 +89,7 @@ def kruskal(sommets, arretes, dic_arretes):
     arretes_tri = sorted(arretes, key = lambda x : x[1])
     #arretes_tri = sorted(arretes, key = lambda x : x[2]1
 
-    print('sort ok')
+    #print('sort ok')
     size=0
     for cur in arretes_tri:
         u = cur[0]
@@ -103,10 +102,11 @@ def kruskal(sommets, arretes, dic_arretes):
                 break
     print("---------------------------")
     print("ARPM")
-    #print(x)
+    print(tree)
+
     return tree
 
-    
+
 '''
 def kruskal(sommets, arretes, dic_arretes):
     print(arretes)
@@ -143,7 +143,7 @@ def main():
             #print(sommets)
             #print(mst_kruskal)
             print('test')
-            deux_approximation(sommets_indices, arretes, dic_arretes)
+            #deux_approximation(sommets_indices, arretes, dic_arretes)
             #print(dic_arretes)
             #print(r)
     else:

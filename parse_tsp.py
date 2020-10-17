@@ -12,6 +12,7 @@ def dist_euc(x1, y1, x2, y2):
 
 
 def parse_test(fichier):
+
     f = open(fichier, 'r') # passer fichier en parametre
 
     lines = f.read().splitlines()
@@ -35,6 +36,7 @@ def parse_test(fichier):
     for i in range(len(sommets)):
         for j in range(i):
             if i != j:
+				#print('test')
                 dic_arretes [math.sqrt(dist_euc(sommets[i][1], sommets[i][2], sommets[j][1], sommets[j][2]))] = (i, j)
                 arretes.append([i, j, dist_euc(sommets[i][1], sommets[i][2], sommets[j][1], sommets[j][2])])
 

@@ -50,9 +50,9 @@ def h1(n, nodes):
 def h2(n, nodes):
     path = n # liste
     path.append(n[0])
-    print(path)
+    #print(path)
     toVisit = list(nodes.keys()) #
-    print(toVisit)
+    #print(toVisit)
     toVisit.remove(n[0])
     toVisit.remove(n[1])
     while len(toVisit) > 0:
@@ -65,7 +65,7 @@ def h2(n, nodes):
                 dist2 = distanceEntre(nodes[path[element]], nodes[path[element+1]])
 
                 cout = (dist1 + dist) - dist2
-                print(cout)
+                #print(cout)
                 if(cout>0) and cout<m:
                     m = cout
                     mIdx = target
@@ -74,6 +74,7 @@ def h2(n, nodes):
         #toVisit.remove(mIdx)
         #path.append(mIdx)
         toVisit.remove(mIdx)
+    #print (path)
     return path
 
 ##################################################
@@ -81,7 +82,7 @@ def h2(n, nodes):
 ##################################################
 
 def glouton(args = {"-l": True}):
-    print("Algorithme glouton H2", args["-l"])
+    print("Algorithme glouton H2")
     tsp_file = sys.argv[1]
     nodes = parse_h2(tsp_file)
     #nodes = parse_test(tsp_file)
