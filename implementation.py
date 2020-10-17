@@ -5,12 +5,83 @@ DBEYBIA Mohamed Baha - 21911190
 KERIMI Yacine
 -------------------------------
 '''
-#from union_find import *
 from math import sqrt
 from parse_tsp import *
 import os
 import parse_tsp
 
+
+##################################################
+### Calcul distance entre deux noeuds pour H1 et H2
+
+##################################################
+
+def distanceEntre(f, t):
+    return ((f['x'] - t['x'])**2 + (f['y'] - t['y'])**2)**0.5
+
+
+
+##################################################
+### Algorithme H1 glouton
+##################################################
+
+def h1(n, nodes):
+    path = [n]
+    print(nodes)
+    toVisit = list(nodes.keys()) # liste des sommets
+    toVisit.remove(n) # supprimer element numero n
+    while len(toVisit) > 0:
+        m = 999999999
+        mIdx = -1
+        for target in toVisit:
+            print(nodes[target])
+            print(target)
+            dist = distanceEntre(nodes[target], nodes[path[-1]])
+            if dist < m:
+                m = dist
+                mIdx = target
+                print(mIdx)
+        toVisit.remove(mIdx)
+        path.append(mIdx)
+        print(path)
+    return path
+
+##################################################
+### Algorithme H2 glouton
+##################################################
+
+def h2(n, nodes):
+    path = n # liste
+    path.append(n[0])
+    #print(path)
+    toVisit = list(nodes.keys()) #
+    #print(toVisit)
+    toVisit.remove(n[0])
+    toVisit.remove(n[1])
+    while len(toVisit) > 0:
+        m = 999999999
+        mIdx = -1
+        for element in range(0, len(path) - 1):
+            for target in toVisit:
+                dist = distanceEntre(nodes[target], nodes[path[element]])
+                dist1 = distanceEntre(nodes[target], nodes[path[element+1]])
+                dist2 = distanceEntre(nodes[path[element]], nodes[path[element+1]])
+
+                cout = (dist1 + dist) - dist2
+                #print(cout)
+                if(cout>0) and cout<m:
+                    m = cout
+                    mIdx = target
+                    indice = element+1
+        path.insert(indice,mIdx)
+        #toVisit.remove(mIdx)
+        #path.append(mIdx)
+        toVisit.remove(mIdx)
+    #print (path)
+    return path
+##################################################
+### Union-find
+##################################################
 
 class unionfind:
     def __init__(self, nodes):
@@ -42,38 +113,14 @@ class unionfind:
                 self.rank[j]+=1
 
 
-'''
-class UnionFind:
-	def __init__(self):
-		self.dic_ensembles = dict()
-		self.num_ensembles = 0
+##################################################
+### 2-Approximation en Utilisant l'ARPM de Kruskal
+##################################################
 
-	def unionUF(self,i,j):
-		self.num_ensembles -= 1
-
-		self.dic_ensembles[self.findUF(i)] = self.dic_ensembles[j]
-
-
-	def findUF(self,i):
-        #print(i)
-		if self.dic_ensembles[i] == i:
-			return i
-		return self.findUF(self.dic_ensembles[i])
-
-	def creerEnsembles(self,elements):
-		for i in elements:
-			self.dic_ensembles[i] = i
-		self.num_ensembles = len(elements)
-
-'''
-
-
-def deux_approximation(sommets,arretes, dic_arretes):
+def deux_approximation(sommets, arretes, dic_arretes):
      n=len(sommets)
-     tree = arpm(list(range(len(sommets))), arretes, dic_arretes)
-     #print(tree)
-     adj = {}
-     # liste adjacence
+     tree = kruskal(sommets, arretes, dic_arretes)
+     adj = {} # liste adjacence
      for arrete in tree:
           adj.setdefault(arrete[0],[]).append(arrete[1])
           adj.setdefault(arrete[1],[]).append(arrete[0])
@@ -91,45 +138,24 @@ def deux_approximation(sommets,arretes, dic_arretes):
                     pile.append(i)
 
      print ('\n Tour optimale pour deux approximation :')
-     print (tour, tour[0])
+     print (tour)
      print (n)
      print ('Cout: ', sum([dic_arretes[(tour[i],tour[(i+1)%n])] for i in range(len(tour))]))
-
-
-
-     '''
-     for i in range(0,n):
-         print ('hello')
-         print(n    )
-         print(dic_arretes[(tour[i],tour[(i+1)%n])])
-         '''
-     #print ('Cost: ', sum([dic_arretes[(tour[i],tour[(i+1)%n])] for i in range(n)]))
 
      return tour
 
 
-#
-def arpm(sommets, arretes, dic_arretes):
-    return kruskal(sommets, arretes, dic_arretes)
 
-
+##################################################
+### Kruskal avec union-find
+##################################################
 def kruskal(sommets, arretes, dic_arretes):
-    n = len(sommets)+1
+    n = len(sommets)
     tree = []
     uf = unionfind(sommets)
     #uf.creerEnsembles(sommets)
 
-    arretes_tri = sorted(dic_arretes, key = dic_arretes.get)
-    #arretes_tri = sorted(arretes, key = dic_arretes.get)
-
-   # for x in dic_arretes:
-    #    if(int(dic_arretes[x]) == 0):
-     #       print(x)
-
-    #print(arretes_tri)
-    #arretes_tri = sorted(arretes, key = lambda x : x[2]1
-
-    #print('sort ok')
+    arretes_tri = sorted(arretes, key = dic_arretes.get)
     size=0
     for cur in arretes_tri:
         u = cur[0]
@@ -148,30 +174,7 @@ def kruskal(sommets, arretes, dic_arretes):
 
 
 
-'''
-def kruskal(sommets, arretes, dic_arretes):
-    #print(arretes)
-    #print(dic_arretes)
-    ensembles = UnionFind()
-    ensembles.creerEnsembles(sommets)
 
-    #arretes_tri = sorted(arretes, key = dic_arretes.get)
-    #arretes_tri = sorted(arretes, key = lambda x : x[2]1
-
-    print('sort ok')
-    mst = list()
-    while ensembles.num_ensembles > 1:
-        a = arretes.pop(0)
-        if not ensembles.findUF(a[0]) == ensembles.findUF(a[1]):
-            #print("avant union", ensembles.findUF(a[0]), ensembles.findUF(a[1]), ensemble.nSets)
-            ensembles.unionUF(a[0], a[1])
-            #print("après union", ensembles.findUF(a[0]), ensembles.findUF(a[1]), ensembles.nSets)
-            mst.append(a)
-    print("---------------------------")
-    print("ARPM")
-    #print(x)
-    return mst
-'''
 ##################################################
 ### execution de l'algorithme
 ##################################################
@@ -179,13 +182,13 @@ def kruskal(sommets, arretes, dic_arretes):
 
 def main():
     if len(argv) > 1 and isfile(argv[1]):
-            sommets_indices, arretes, sommets, dic_arretes = parse_test(argv[1])
-            mst_kruskal = arpm(list(range(len(sommets_indices))), arretes, dic_arretes)
-            #print(sommets)
+            sommets, arretes, cout = parse_test(argv[1])
+            #mst_kruskal = kruskal(sommets, arretes, cout)
             #print(mst_kruskal)
-            #print('test')
+            #h2
             #print(dic_arretes)
-            deux_approximation(sommets_indices, arretes, dic_arretes)
+            deux_approximation(sommets, arretes, cout)
+            #print(sommets_indices)
             #print(dic_arretes)
             #print(r)
     else:

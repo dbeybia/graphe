@@ -2,19 +2,7 @@
 import sys, time, random
 from parse_tsp import parse_h2, parse_test
 
-# Distance
-def distance(path, nodes):
-    dist = 0
-    for idx in range(len(path)):
-        cur = path[idx]
-        nxt = path[(idx+1) % len(path)]
 
-        dist += distanceEntre(nodes[cur], nodes[nxt])
-    return dist
-
-# Distance entre deux nodes
-def dist_euc(x1, y1, x2, y2):
-	return( sqrt( (x1-x2)**2 + (y1 - y2)**2))
 
 # Exemple appel : sommets[i][1], sommets[i][2], sommets[j][1], sommets[j][2])] = (i, j)
 def distanceEntre(f, t):
@@ -47,14 +35,20 @@ def h1(n, nodes):
 
 
 # Implementation h2 glouton
-def h2(n, nodes):
+def h2(n, nodes, sommets, arretes, cout):
     path = n # liste
+    #l_path =[1, 2]
     path.append(n[0])
     #print(path)
     toVisit = list(nodes.keys()) #
     #print(toVisit)
     toVisit.remove(n[0])
     toVisit.remove(n[1])
+    print('test h2')
+    print(sommets)
+    print(distanceEntre(nodes[0], nodes[path[1]]))
+
+
     while len(toVisit) > 0:
         m = 999999999
         mIdx = -1
@@ -85,6 +79,7 @@ def glouton(args = {"-l": True}):
     print("Algorithme glouton H2")
     tsp_file = sys.argv[1]
     nodes = parse_h2(tsp_file)
+    sommets, arretes, cout = parse_test(tsp_file)
     #nodes = parse_test(tsp_file)
 
     #sommets_indices, arretes, sommets =  parse_test(tsp_file)
@@ -96,8 +91,8 @@ def glouton(args = {"-l": True}):
     #liste_sommets.append(alea1)
     #liste_sommets.append(alea2)
     liste_sommets.append(2)
-    path = h2(liste_sommets, nodes)
-    print(path)
+    path = h2(liste_sommets, nodes, sommets, arretes, cout)
+    #print(path)
     #path = h2(random.randint(1, len(sommets)), sommets_indices)
     #dist = distance(path, nodes)
 
