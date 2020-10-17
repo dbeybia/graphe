@@ -26,18 +26,23 @@ def parse_test(fichier):
 
     print (sommets)
 
-    dic_arretes = {} # sommet, sommet, cout
+    dic_arretes = dict() # sommet, sommet, cout
     arretes = list() # début, fin, poids
     print('------ nb sommets ---------')
     print(len(sommets))
 
-
+#cost[nodes[i],nodes[j]]=cost[nodes[j],nodes[i]]=math.sqrt((x[nodes[i]]-x[nodes[j]])**2 + (y[nodes[i]]-y[nodes[j]])**2)
     # arretes
+
     for i in range(len(sommets)):
         for j in range(i):
             if i != j:
-				#print('test')
-                dic_arretes [math.sqrt(dist_euc(sommets[i][1], sommets[i][2], sommets[j][1], sommets[j][2]))] = (i, j)
+
+                print('test')
+                # (1, 2) : 15.74747
+                #if (math.sqrt(dist_euc(sommets[i][1], sommets[i][2], sommets[j][1], sommets[j][2]))!=0):
+                dic_arretes [i,j] = dic_arretes[j,i] =math.sqrt(dist_euc(sommets[i][2], sommets[i][0], sommets[j][0], sommets[j][0]))
+                
                 arretes.append([i, j, dist_euc(sommets[i][1], sommets[i][2], sommets[j][1], sommets[j][2])])
 
 
