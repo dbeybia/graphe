@@ -7,44 +7,35 @@ KERIMI Yacine
 '''
 from math import sqrt
 from parse_tsp import *
-import os
 import parse_tsp
 from os.path import isfile
-##################################################
-### Calcul cout
-##################################################
-def cout_algorithme(path, cout):
-    dist = 0
-    for idx in range(len(path)):
-        cur = path[idx]
-        nxt = path[(idx+1) % len(path)]
-        if(cur!=nxt):
-            dist += cout[(cur, nxt)]
-    return dist
+from copy import deepcopy
+from timeit import default_timer
+from random import randrange
+
 
 ##################################################
 ### Algorithme H1 glouton
 ##################################################
 
-def h1(n, nodes, cout, sommets):
-    path = [n]
-    #print(nodes)
+def h1(n, cout, sommets):
+    tour = [n]
     print(len(sommets))
-    toVisit = list(range(1, len(sommets)+1)) # liste des sommets
-    toVisit.remove(n) # supprimer element numero n
-    while len(toVisit) > 0:
+    avisiter = list(range(1, len(sommets)+1)) # liste des sommets
+    avisiter.remove(n) # supprimer element numero n
+    while len(avisiter) > 0:
         m = 999999999
         mIdx = -1
-        for target in toVisit:
-            dist = cout[(target, path[-1])]
+        for target in avisiter:
+            dist = cout[(target, tour[-1])]
             if dist < m:
                 m = dist
                 mIdx = target
                 #print(mIdx)
-        toVisit.remove(mIdx)
-        path.append(mIdx)
-    print (path)
-    return path
+        avisiter.remove(mIdx)
+        tour.append(mIdx)
+    #print (tour)
+    return tour
 
 
 ##################################################
@@ -52,60 +43,60 @@ def h1(n, nodes, cout, sommets):
 ##################################################
 
 def h2(n, sommets, cout):
-    path = n # liste
-    path.append(n[0])
-    toVisit = list(range(1, len(sommets)+1))
-    toVisit.remove(n[0])
-    toVisit.remove(n[1])
-    while len(toVisit) > 0:
+    tour = n # liste
+    tour.append(n[0])
+    avisiter = list(range(1, len(sommets)+1))
+    avisiter.remove(n[0])
+    avisiter.remove(n[1])
+    while len(avisiter) > 0:
         m = 999999999
         mIdx = -1
-        for element in range(0, len(path) - 1):
-            for target in toVisit:
-                dist = cout[(target, path[element])]
-                dist1 = cout[(target, path[element+1])]
-                dist2 = cout[(path[element],path[element+1])]
+        for element in range(0, len(tour) - 1):
+            for target in avisiter:
+                dist = cout[(target, tour[element])]
+                dist1 = cout[(target, tour[element+1])]
+                dist2 = cout[(tour[element],tour[element+1])]
                 couts = (dist1 + dist) - dist2
                 if(couts>0) and couts<m:
                     m = couts
                     mIdx = target
                     indice = element+1
-        path.insert(indice,mIdx)
-        toVisit.remove(mIdx)
-    return path
+        tour.insert(indice,mIdx)
+        avisiter.remove(mIdx)
+    return tour
 
 ##################################################
 ### Union-find
 ##################################################
 
 class unionfind:
-    def __init__(self, nodes):
+    def __init__(self, sommets):
         self.parent = {}
-        self.rank = {}
-        self.elements = nodes
+        self.rang = {}
+        self.elements = sommets
         for i in self.elements:
-            self.makeset(i)
+            self.creerensemble(i)
 
-    def makeset(self,i):
+    def creerensemble(self,i):
         self.parent[i]=i
-        self.rank[i]=0
+        self.rang[i]=0
 
-    def findset(self,i):
+    def find(self,i):
         if self.parent[i]!=i:
-            self.parent[i] = self.findset(self.parent[i])
+            self.parent[i] = self.find(self.parent[i])
         return self.parent[i]
 
-    def join(self,i,j):
-        i = self.findset(i)
-        j = self.findset(j)
+    def union(self,i,j):
+        i = self.find(i)
+        j = self.find(j)
         if i==j:
             return
-        if self.rank[i]>self.rank[j]:
+        if self.rang[i]>self.rang[j]:
             self.parent[j]=i
         else:
             self.parent[i]=j
-            if self.rank[i]==self.rank[j]:
-                self.rank[j]+=1
+            if self.rang[i]==self.rang[j]:
+                self.rang[j]+=1
 
 
 ##################################################
@@ -139,47 +130,81 @@ def deux_approximation(sommets, arretes, dic_arretes):
 ##################################################
 def kruskal(sommets, arretes, dic_arretes):
     n = len(sommets)
-    tree = []
+    arbre = []
     uf = unionfind(sommets)
     arretes_tri = sorted(arretes, key = dic_arretes.get)
-    size=0
+    taille=0
     for cur in arretes_tri:
         u = cur[0]
         v = cur[1]
-        if uf.findset(u)!=uf.findset(v):
-            tree.append(cur)
-            uf.join(u,v)
-            size+=1
-            if size==n-1:
+        if uf.find(u)!=uf.find(v):
+            arbre.append(cur)
+            uf.union(u,v)
+            taille+=1
+            if taille==n-1:
                 break
-    return tree
-
+    return arbre
 
 ##################################################
-### 2-OPT - a faire
+### Calcul distance/cout
 ##################################################
-'''
-def two_opt_python(sommets, cout):
-    tour = sommets
-    min_change = 0
-    num_cities = len(tour)
-    # Find the best move
-    for i in range(1,num_cities - 1):
-        for j in range(i + 2, num_cities):
-            change = cout[(i,j)] + cout[(i+1, j+1)] + cout[(i, i+1)] + cout[(j, j+1)]
-            #dist(i, j) + dist(i+1, j+1) - dist(i, i+1) - dist(j, j+1)
-            if change < min_change:
-                min_change = change
-                min_i, min_j = i, j
+def tour_distance(tour, cout):
+    dist = 0
+    idx = tour[-1]
+    for sommet in tour:
+        if(sommet!=idx):
+            dist += cout[(sommet, idx)]
+            idx = sommet
+    return dist
+
+##################################################
+### Fonction permut_2_opt
+##################################################
+
+def permut_2_opt(tour, i, k):
+
+    assert i >= 0 and i < (len(tour) - 1)
+    assert k > i and k < len(tour)
+
+    nouv_tour = tour[0:i]
+    nouv_tour.extend(reversed(tour[i:k + 1]))
+    nouv_tour.extend(tour[k + 1:])
+
+    assert len(nouv_tour) == len(tour)
+    return nouv_tour
+
+##################################################
+### Implementation algorithme de post-optimisation (2opt)
+##################################################
+def deux_opt(tour, cout):
+
+    changement = True
+    cycle_initale = tour
+    distance_initial = tour_distance(tour, cout)
+    while changement:
+        changement = False
+        for i in range(len(cycle_initale) - 1):
+            for k in range(i + 1, len(cycle_initale)):
+                nouv_tour = permut_2_opt(cycle_initale, i, k)
+                nouv_distance = tour_distance(nouv_tour, cout)
+                if nouv_distance < distance_initial:
+                    distance_initial = nouv_distance
+                    cycle_initale = nouv_tour
+                    changement = True
+                    break  # improvement found, return to the top of the while loop
+            if changement:
+                break
+    assert len(cycle_initale) == len(tour)
+    return cycle_initale
 
 
-    print(min_change)
-    # Update tour with best move
-    if min_change < 0:
-        tour[min_i+1:min_j+1] = tour[min_i+1:min_j+1][::-1]
-    print('tour 2-opt:',tour)
-    return tour
-'''
+
+def print_expirementation(description):
+    print("Nom : " + str(len(tour)))
+    print("Fichier : " + str(len(tour)))
+    print("Dimension : " + str(len(tour)))
+    #print("Time to run 2opt : %.2f seconds" % time)
+
 ##################################################
 ### execution de l'algorithme
 ##################################################
@@ -188,38 +213,46 @@ def main():
     if len(argv) > 1 and isfile(argv[1]):
 
             ##################################################
+            ### Test global sur tout les fichiers
+            ##################################################
+
+
+
+            ##################################################
             ### Parsing fichier et récuperation des données
             ### liste sommets, liste arretes, dictionnaire des
             ### couts
             ##################################################
 
-            #sommets, arretes, cout, description, opt_tour = parse_test(argv[1])
             sommets, arretes, cout, description = parse_test(argv[1])
+            assert len(sommets) != 0
+
+            #sommets, arretes, cout, description, opt_tour = parse_test(argv[1])
+            #sommets, arretes, cout, description = parse_test(argv[1])
 
             ##################################################
             ### Algorithme glouton H2 (et H1)
             ##################################################
-            print(description)
+            #print(description)
             liste_sommets = [1, 2]
             test_h2 = h2(liste_sommets, sommets, cout)
             #print(test_h2)
-            print("Cout H2 :", cout_algorithme(test_h2, cout))
-            print(test_h2)
+            print("Cout H2 : " + str(tour_distance(test_h2, cout)))
+            #print(test_h2)
             ##################################################
             ### 2 - Approximation (en utilisant L'ARPM de kruskal)
             ##################################################
 
             test_2ap = deux_approximation(sommets, arretes, cout)
-            print("Cout 2-Approximation :", cout_algorithme(test_2ap, cout))
+            print("Cout 2-Approximation : " + str(tour_distance(test_2ap, cout)))
             #print(test_2ap)
             ##################################################
             ### 2-OPT
             ##################################################
+
             #test_2_opt = two_opt_python(sommets, cout)
-
-            #print(test_2_opt)
-            #print("Cout 2-opt :", cout_algorithme(test_2_opt, cout))
-
+            test_2opt = deux_opt(sommets, cout)
+            print("Cout 2-Opt : " + str(tour_distance(test_2opt, cout)))
 
     else:
             print("Utilisiation : ", os.path.basename(__file__), " <fichier_test.tsp>")

@@ -4,8 +4,7 @@ COMMENT: 52 locations in Berlin (Groetschel)
 DIMENSION: 52
 
 Sommets et Coordonnées
-n°i Coord_Xi Coord_Yi
-
+NODE_COORD_SECTION
 1 565 575
 2 25 185
 3 345 750
@@ -16,7 +15,7 @@ n°i Coord_Xi Coord_Yi
 8 525 1000
 9 580 1175
 10 650 1130
-11 1605 620 
+11 1605 620
 12 1220 580
 13 1465 200
 14 1530 5
@@ -24,7 +23,7 @@ n°i Coord_Xi Coord_Yi
 16 725 370
 17 145 665
 18 415 635
-19 510 875  
+19 510 875
 20 560 365
 21 300 465
 22 520 585
@@ -59,4 +58,3 @@ n°i Coord_Xi Coord_Yi
 51 1340 725
 52 1740 245
 EOF
-

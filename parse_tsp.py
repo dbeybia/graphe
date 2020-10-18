@@ -8,13 +8,17 @@ def parse_test(fichier):
 
 	f = open(fichier, 'r') #passer fichier en parametre
 	lines = f.read().splitlines()
+
+
+	
 	f_opt = open(fichier.replace(".tsp", ".opt.tour"))
 	opt_lignes = f_opt.read().splitlines()
+
 	sommets = []
 	arretes = []
 	x = {}
-	y={}
-	cout = {}
+	y={} # 1
+	cout = {} #(1, 2) : 15.666336
 	description = []
 	opt_tour = []
 	# Fichier opt.tour
