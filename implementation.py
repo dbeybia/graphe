@@ -214,7 +214,7 @@ def main():
             assert len(sommets) != 0
 
             ##################################################
-            ### Algorithme glouton H2 (et H1)
+            ### Algorithme glouton H2
             ##################################################
             #print(description)
 
@@ -244,22 +244,29 @@ def main():
             print("Cout 2-Opt : " , cout_2opt)
             print('-------------')
 
+            ##################################################
+            ### 2-approximation suivi de de 2-opt
+            ##################################################
             test_2ap_suivi_2opt = deux_opt(test_2ap, cout)
             cout_test_2ap_suivi_2opt = round(tour_distance(test_2ap_suivi_2opt, cout))
             print("2ap_suivi_2opt : " , cout_test_2ap_suivi_2opt )
-
+            ##################################################
+            ### H2 suivi de 2-opt
+            ##################################################
             test_h2_suivi_2_opt = deux_opt(test_h2, cout)
             cout_test_h2_suivi_2_opt = round(tour_distance(test_h2_suivi_2_opt, cout))
             print("H2_suivi_2opt : " , cout_test_h2_suivi_2_opt)
             print('-------------')
 
             if len(argv) == 2 and isfile(argv[1]):
-                opt = int(argv[2])
+                ##################################################
+                ### Calcul ratios
+                ##################################################
+                opt = int(argv[2]) # cout optimum passé en parametres
                 ratio_h2_sol_opt= cout_h2/opt # H2/Optimale
                 ratio_h2_suivi_2_opt_sol_opt = cout_test_h2_suivi_2_opt/opt# h2 suivi 2-opt/Optimale
                 ratio_2ap_sol_opt = cout_2ap/opt #2ap/Optimale
                 ratio_2ap_suivi_2_opt_sol_opt = cout_test_2ap_suivi_2opt/opt #2ap suivi 2-opt/Optimale
-
 
                 print('-------------')
                 print("ratio_h2_sol_opt : " , ratio_h2_sol_opt)
@@ -268,7 +275,7 @@ def main():
                 print("ratio_2ap_sol_opt : " , ratio_2ap_sol_opt)
                 print("ratio_2ap_suivi_2_opt_sol_opt : " , ratio_2ap_suivi_2_opt_sol_opt)
 
-                
+
 
 
     else:
