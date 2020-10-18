@@ -9,8 +9,7 @@ from math import sqrt
 from parse_tsp import *
 import os
 import parse_tsp
-
-
+from os.path import isfile
 ##################################################
 ### Calcul cout
 ##################################################
@@ -22,6 +21,7 @@ def cout_algorithme(path, cout):
         if(cur!=nxt):
             dist += cout[(cur, nxt)]
     return dist
+
 ##################################################
 ### Algorithme H1 glouton
 ##################################################
@@ -158,10 +158,28 @@ def kruskal(sommets, arretes, dic_arretes):
 ##################################################
 ### 2-OPT - a faire
 ##################################################
+'''
+def two_opt_python(sommets, cout):
+    tour = sommets
+    min_change = 0
+    num_cities = len(tour)
+    # Find the best move
+    for i in range(1,num_cities - 1):
+        for j in range(i + 2, num_cities):
+            change = cout[(i,j)] + cout[(i+1, j+1)] + cout[(i, i+1)] + cout[(j, j+1)]
+            #dist(i, j) + dist(i+1, j+1) - dist(i, i+1) - dist(j, j+1)
+            if change < min_change:
+                min_change = change
+                min_i, min_j = i, j
 
 
-
-
+    print(min_change)
+    # Update tour with best move
+    if min_change < 0:
+        tour[min_i+1:min_j+1] = tour[min_i+1:min_j+1][::-1]
+    print('tour 2-opt:',tour)
+    return tour
+'''
 ##################################################
 ### execution de l'algorithme
 ##################################################
@@ -175,28 +193,33 @@ def main():
             ### couts
             ##################################################
 
-            sommets, arretes, cout = parse_test(argv[1])
+            #sommets, arretes, cout, description, opt_tour = parse_test(argv[1])
+            sommets, arretes, cout, description = parse_test(argv[1])
 
             ##################################################
             ### Algorithme glouton H2 (et H1)
             ##################################################
-
+            print(description)
             liste_sommets = [1, 2]
             test_h2 = h2(liste_sommets, sommets, cout)
             #print(test_h2)
             print("Cout H2 :", cout_algorithme(test_h2, cout))
-
+            print(test_h2)
             ##################################################
             ### 2 - Approximation (en utilisant L'ARPM de kruskal)
             ##################################################
 
             test_2ap = deux_approximation(sommets, arretes, cout)
             print("Cout 2-Approximation :", cout_algorithme(test_2ap, cout))
-
-
+            #print(test_2ap)
             ##################################################
             ### 2-OPT
             ##################################################
+            #test_2_opt = two_opt_python(sommets, cout)
+
+            #print(test_2_opt)
+            #print("Cout 2-opt :", cout_algorithme(test_2_opt, cout))
+
 
     else:
             print("Utilisiation : ", os.path.basename(__file__), " <fichier_test.tsp>")
