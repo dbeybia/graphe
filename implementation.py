@@ -8,11 +8,25 @@ KERIMI Yacine
 from math import sqrt
 from parse_tsp import *
 import parse_tsp
-from os.path import isfile
+import os
 from copy import deepcopy
 from timeit import default_timer
 from random import randrange
 
+
+
+
+##################################################
+### Calcul distance/cout
+##################################################
+def tour_distance(tour, cout):
+    dist = 0
+    idx = tour[-1]
+    for sommet in tour:
+        if(sommet!=idx):
+            dist += cout[(sommet, idx)]
+            idx = sommet
+    return dist
 
 ##################################################
 ### Algorithme H1 glouton
@@ -103,9 +117,9 @@ class unionfind:
 
 def deux_approximation(sommets, arretes, dic_arretes):
      n=len(sommets)
-     tree = kruskal(sommets, arretes, dic_arretes)
+     arbre = kruskal(sommets, arretes, dic_arretes)
      adj = {} # liste adjacence
-     for arrete in tree:
+     for arrete in arbre:
           adj.setdefault(arrete[0],[]).append(arrete[1])
           adj.setdefault(arrete[1],[]).append(arrete[0])
 
@@ -141,17 +155,6 @@ def kruskal(sommets, arretes, dic_arretes):
                 break
     return arbre
 
-##################################################
-### Calcul distance/cout
-##################################################
-def tour_distance(tour, cout):
-    dist = 0
-    idx = tour[-1]
-    for sommet in tour:
-        if(sommet!=idx):
-            dist += cout[(sommet, idx)]
-            idx = sommet
-    return dist
 
 ##################################################
 ### Fonction permut_2_opt
@@ -194,18 +197,7 @@ def deux_opt(tour, cout):
     return cycle_initale
 
 
-##################################################
-### Affichage expiremntation
-##################################################
-'''
-def affichage_expirementation(description):
 
-
-    print("Nom : " + str(len(tour)))
-    print("Fichier : " + str(len(tour)))
-    print("Dimension : " + str(len(tour)))
-    return True
-'''
 ##################################################
 ### execution de l'algorithme
 ##################################################
@@ -214,46 +206,61 @@ def main():
     if len(argv) > 1 and isfile(argv[1]):
 
             ##################################################
-            ### Test global sur tout les fichiers
-            ##################################################
-
-
-
-            ##################################################
             ### Parsing fichier et récuperation des données
             ### liste sommets, liste arretes, dictionnaire des
             ### couts
             ##################################################
 
-            sommets, arretes, cout, description = parse_test(argv[1])
+            sommets, arretes, cout = parse_test(argv[1])
             assert len(sommets) != 0
-
-            #sommets, arretes, cout, description, opt_tour = parse_test(argv[1])
-            #sommets, arretes, cout, description = parse_test(argv[1])
 
             ##################################################
             ### Algorithme glouton H2 (et H1)
             ##################################################
             #print(description)
-            liste_sommets = [1, 2]
+
+            liste_sommets = [1, 2] # on peut choisir les sommets aléatoirement
             test_h2 = h2(liste_sommets, sommets, cout)
             #print(test_h2)
             print("Cout H2 : " , tour_distance(test_h2, cout))
             #print(test_h2)
+
+
             ##################################################
             ### 2 - Approximation (en utilisant L'ARPM de kruskal)
             ##################################################
+            #test_2opt = deux_opt(sommets, cout)
+            #test_2opt = deux_opt(sommets, cout)
+            #test_2opt_cycle = test_2opt
+            #test_2opt_cycle.append(test_2opt[0])
+            #print(test_2opt_cycle)
 
             test_2ap = deux_approximation(sommets, arretes, cout)
+
             print("Cout 2-Approximation : " , tour_distance(test_2ap, cout))
             #print(test_2ap)
+
+
             ##################################################
             ### 2-OPT
             ##################################################
 
-            #test_2_opt = two_opt_python(sommets, cout)
             test_2opt = deux_opt(sommets, cout)
+            #test_2opt_cycle = test_2opt
+            #test_2opt_cycle.append(test_2opt[0])
+
+            #print(test_2opt_cyle)
+            #test_2opt = deux_opt(sommets, cout)
             print("Cout 2-Opt : " , tour_distance(test_2opt, cout))
+            print('-------------')
+
+            test_2ap_suivi_2opt = deux_opt(test_2ap, cout)
+            print("2ap_suivi_2opt : " , tour_distance(test_2ap_suivi_2opt, cout))
+
+            test_h2_suivi_2_opt = deux_opt(test_h2, cout)
+            print("H2_suivi_2opt : " , tour_distance(test_h2_suivi_2_opt, cout))
+            print('-------------')
+            
 
     else:
             print("Utilisiation : ", os.path.basename(__file__), " <fichier_test.tsp>")
