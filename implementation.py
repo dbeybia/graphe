@@ -12,7 +12,7 @@ import parse_tsp
 
 
 ##################################################
-### Calcul cout H2 glouton
+### Calcul cout
 ##################################################
 def cout_algorithme(path, cout):
     dist = 0
@@ -152,8 +152,12 @@ def kruskal(sommets, arretes, dic_arretes):
             size+=1
             if size==n-1:
                 break
-    print("ARPM")
     return tree
+
+
+##################################################
+### 2-OPT
+##################################################
 
 
 
@@ -176,12 +180,12 @@ def main():
             ##################################################
             ### Algorithme glouton H2 (et H1)
             ##################################################
-            '''
+
             liste_sommets = [1, 2]
             test_h2 = h2(liste_sommets, sommets, cout)
-            print(test_h2)
+            #print(test_h2)
             print("Cout H2 :", cout_algorithme(test_h2, cout))
-            '''
+
             ##################################################
             ### 2 - Approximation (en utilisant L'ARPM de kruskal)
             ##################################################
