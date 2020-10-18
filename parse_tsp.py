@@ -1,16 +1,19 @@
+'''
+DM Graphes
+-------------------------------
+DBEYBIA Mohamed Baha - 21911190
+KERIMI Yacine
+-------------------------------
+'''
 
 import math
-
 from sys import argv
 from os.path import isfile
 
 def parse_test(fichier):
 
-	f = open(fichier, 'r') #passer fichier en parametre
+	f = open(fichier, 'r')
 	lines = f.read().splitlines()
-
-
-
 	f_opt = open(fichier.replace(".tsp", ".opt.tour"))
 	opt_lignes = f_opt.read().splitlines()
 
@@ -20,8 +23,6 @@ def parse_test(fichier):
 	y={} # 1
 	cout = {} #(1, 2) : 15.666336
 	description = []
-
-
 	'''
 	# Fichier opt.tour
 	opt_tour = []
@@ -34,12 +35,11 @@ def parse_test(fichier):
 			description.append(l)
 	'''
 	for line in lines:
-		if line and line.lstrip()[0].isdigit(): #vrai, si ya que des chiffres dans la ligne
+		if line and line.lstrip()[0].isdigit(): # vrai, si ya que des chiffres dans la ligne
 			k= line.split()
 			sommets.append(int(k[0]))
 			x[sommets[int(k[0])-1]] = float(k[1])
 			y[sommets[int(k[0])-1]] = float(k[2])
-
 
 		for i in range(len(sommets)):
 			#print(len(sommets))

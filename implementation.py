@@ -34,7 +34,6 @@ def h1(n, cout, sommets):
                 #print(mIdx)
         avisiter.remove(mIdx)
         tour.append(mIdx)
-    #print (tour)
     return tour
 
 
@@ -98,7 +97,6 @@ class unionfind:
             if self.rang[i]==self.rang[j]:
                 self.rang[j]+=1
 
-
 ##################################################
 ### 2-Approximation en Utilisant l'ARPM de Kruskal
 ##################################################
@@ -122,8 +120,6 @@ def deux_approximation(sommets, arretes, dic_arretes):
                if visites[i]!=True:
                     pile.append(i)
      return tour
-
-
 
 ##################################################
 ### Kruskal avec union-find
@@ -198,14 +194,18 @@ def deux_opt(tour, cout):
     return cycle_initale
 
 
-
-def print_expirementation(description):
+##################################################
+### Affichage expiremntation
+##################################################
+'''
+def affichage_expirementation(description):
 
 
     print("Nom : " + str(len(tour)))
     print("Fichier : " + str(len(tour)))
     print("Dimension : " + str(len(tour)))
-
+    return True
+'''
 ##################################################
 ### execution de l'algorithme
 ##################################################
@@ -238,14 +238,14 @@ def main():
             liste_sommets = [1, 2]
             test_h2 = h2(liste_sommets, sommets, cout)
             #print(test_h2)
-            print("Cout H2 : " + str(tour_distance(test_h2, cout)))
+            print("Cout H2 : " , tour_distance(test_h2, cout))
             #print(test_h2)
             ##################################################
             ### 2 - Approximation (en utilisant L'ARPM de kruskal)
             ##################################################
 
             test_2ap = deux_approximation(sommets, arretes, cout)
-            print("Cout 2-Approximation : " + str(tour_distance(test_2ap, cout)))
+            print("Cout 2-Approximation : " , tour_distance(test_2ap, cout))
             #print(test_2ap)
             ##################################################
             ### 2-OPT
@@ -253,7 +253,7 @@ def main():
 
             #test_2_opt = two_opt_python(sommets, cout)
             test_2opt = deux_opt(sommets, cout)
-            print("Cout 2-Opt : " + str(tour_distance(test_2opt, cout)))
+            print("Cout 2-Opt : " , tour_distance(test_2opt, cout))
 
     else:
             print("Utilisiation : ", os.path.basename(__file__), " <fichier_test.tsp>")
