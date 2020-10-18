@@ -191,7 +191,7 @@ def deux_opt(tour, cout):
                     distance_initial = nouv_distance
                     cycle_initale = nouv_tour
                     changement = True
-                    break  # improvement found, return to the top of the while loop
+                    break
             if changement:
                 break
     assert len(cycle_initale) == len(tour)
@@ -200,10 +200,11 @@ def deux_opt(tour, cout):
 
 
 def print_expirementation(description):
+
+
     print("Nom : " + str(len(tour)))
     print("Fichier : " + str(len(tour)))
     print("Dimension : " + str(len(tour)))
-    #print("Time to run 2opt : %.2f seconds" % time)
 
 ##################################################
 ### execution de l'algorithme

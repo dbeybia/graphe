@@ -10,7 +10,7 @@ def parse_test(fichier):
 	lines = f.read().splitlines()
 
 
-	
+
 	f_opt = open(fichier.replace(".tsp", ".opt.tour"))
 	opt_lignes = f_opt.read().splitlines()
 
@@ -20,8 +20,11 @@ def parse_test(fichier):
 	y={} # 1
 	cout = {} #(1, 2) : 15.666336
 	description = []
-	opt_tour = []
+
+
+	'''
 	# Fichier opt.tour
+	opt_tour = []
 	for ligne_opt in opt_lignes:
 		if ligne_opt and ligne_opt.lstrip()[0].isdigit():
 			l = ligne_opt.split()
@@ -29,7 +32,7 @@ def parse_test(fichier):
 		else:
 			l= ligne_opt.split()
 			description.append(l)
-
+	'''
 	for line in lines:
 		if line and line.lstrip()[0].isdigit(): #vrai, si ya que des chiffres dans la ligne
 			k= line.split()
@@ -38,8 +41,6 @@ def parse_test(fichier):
 			y[sommets[int(k[0])-1]] = float(k[2])
 
 
-
-	#print(x)
 		for i in range(len(sommets)):
 			#print(len(sommets))
 			for j in range(i+1, len(sommets)):
