@@ -210,7 +210,6 @@ def main():
             ### liste sommets, liste arretes, dictionnaire des
             ### couts
             ##################################################
-
             sommets, arretes, cout = parse_test(argv[1])
             assert len(sommets) != 0
 
@@ -221,23 +220,18 @@ def main():
 
             liste_sommets = [1, 2] # on peut choisir les sommets aléatoirement
             test_h2 = h2(liste_sommets, sommets, cout)
-            #print(test_h2)
-            print("Cout H2 : " , tour_distance(test_h2, cout))
+            cout_h2 = round(tour_distance(test_h2, cout))
+            print("Cout H2 : " , cout_h2)
             #print(test_h2)
 
 
             ##################################################
             ### 2 - Approximation (en utilisant L'ARPM de kruskal)
             ##################################################
-            #test_2opt = deux_opt(sommets, cout)
-            #test_2opt = deux_opt(sommets, cout)
-            #test_2opt_cycle = test_2opt
-            #test_2opt_cycle.append(test_2opt[0])
-            #print(test_2opt_cycle)
 
             test_2ap = deux_approximation(sommets, arretes, cout)
-
-            print("Cout 2-Approximation : " , tour_distance(test_2ap, cout))
+            cout_2ap = round(tour_distance(test_2ap, cout))
+            print("Cout 2-Approximation : " , cout_2ap)
             #print(test_2ap)
 
 
@@ -246,23 +240,39 @@ def main():
             ##################################################
 
             test_2opt = deux_opt(sommets, cout)
-            #test_2opt_cycle = test_2opt
-            #test_2opt_cycle.append(test_2opt[0])
-
-            #print(test_2opt_cyle)
-            #test_2opt = deux_opt(sommets, cout)
-            print("Cout 2-Opt : " , tour_distance(test_2opt, cout))
+            cout_2opt = round(tour_distance(test_2opt, cout))
+            print("Cout 2-Opt : " , cout_2opt)
             print('-------------')
 
             test_2ap_suivi_2opt = deux_opt(test_2ap, cout)
-            print("2ap_suivi_2opt : " , tour_distance(test_2ap_suivi_2opt, cout))
+            cout_test_2ap_suivi_2opt = round(tour_distance(test_2ap_suivi_2opt, cout))
+            print("2ap_suivi_2opt : " , cout_test_2ap_suivi_2opt )
 
             test_h2_suivi_2_opt = deux_opt(test_h2, cout)
-            print("H2_suivi_2opt : " , tour_distance(test_h2_suivi_2_opt, cout))
+            cout_test_h2_suivi_2_opt = round(tour_distance(test_h2_suivi_2_opt, cout))
+            print("H2_suivi_2opt : " , cout_test_h2_suivi_2_opt)
             print('-------------')
-            
+
+            if len(argv) == 2 and isfile(argv[1]):
+                opt = int(argv[2])
+                ratio_h2_sol_opt= cout_h2/opt # H2/Optimale
+                ratio_h2_suivi_2_opt_sol_opt = cout_test_h2_suivi_2_opt/opt# h2 suivi 2-opt/Optimale
+                ratio_2ap_sol_opt = cout_2ap/opt #2ap/Optimale
+                ratio_2ap_suivi_2_opt_sol_opt = cout_test_2ap_suivi_2opt/opt #2ap suivi 2-opt/Optimale
+
+
+                print('-------------')
+                print("ratio_h2_sol_opt : " , ratio_h2_sol_opt)
+                print("ratio_h2_suivi_2_opt_sol_opt : " , ratio_h2_suivi_2_opt_sol_opt)
+                print('-------------')
+                print("ratio_2ap_sol_opt : " , ratio_2ap_sol_opt)
+                print("ratio_2ap_suivi_2_opt_sol_opt : " , ratio_2ap_suivi_2_opt_sol_opt)
+
+                
+
 
     else:
-            print("Utilisiation : ", os.path.basename(__file__), " <fichier_test.tsp>")
+            #print("Utilisiation : ", os.path.basename(__file__), " <fichier_test.tsp>")
+            print("Utilisiation : ", os.path.basename(__file__), " <fichier_test.tsp> <cout_optimal_pour_expirements>")
 
 main()
