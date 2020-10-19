@@ -220,8 +220,7 @@ def main():
 
             liste_sommets = [1, 2] # on peut choisir les sommets aléatoirement
             test_h2 = h2(liste_sommets, sommets, cout)
-            cout_h2 = round(tour_distance(test_h2, cout))
-            print("Cout H2 : " , cout_h2)
+            print("Cout H2 : " , round(tour_distance(test_h2, cout)))
             #print(test_h2)
 
 
@@ -230,8 +229,7 @@ def main():
             ##################################################
 
             test_2ap = deux_approximation(sommets, arretes, cout)
-            cout_2ap = round(tour_distance(test_2ap, cout))
-            print("Cout 2-Approximation : " , cout_2ap)
+            print("Cout 2-Approximation : " , round(tour_distance(test_2ap, cout)))
             #print(test_2ap)
 
 
@@ -240,24 +238,23 @@ def main():
             ##################################################
 
             test_2opt = deux_opt(sommets, cout)
-            cout_2opt = round(tour_distance(test_2opt, cout))
-            print("Cout 2-Opt : " , cout_2opt)
+            print("Cout 2-Opt : " , round(tour_distance(test_2opt, cout)))
             print('-------------')
 
             ##################################################
             ### 2-approximation suivi de de 2-opt
             ##################################################
             test_2ap_suivi_2opt = deux_opt(test_2ap, cout)
-            cout_test_2ap_suivi_2opt = round(tour_distance(test_2ap_suivi_2opt, cout))
-            print("2ap_suivi_2opt : " , cout_test_2ap_suivi_2opt )
+            print("2ap_suivi_2opt : " , round(tour_distance(test_2ap_suivi_2opt, cout)))
             ##################################################
             ### H2 suivi de 2-opt
             ##################################################
             test_h2_suivi_2_opt = deux_opt(test_h2, cout)
-            cout_test_h2_suivi_2_opt = round(tour_distance(test_h2_suivi_2_opt, cout))
-            print("H2_suivi_2opt : " , cout_test_h2_suivi_2_opt)
+            print("H2_suivi_2opt : " , round(tour_distance(test_h2_suivi_2_opt, cout)))
             print('-------------')
 
+
+            '''
             if len(argv) == 2 and isfile(argv[1]):
                 ##################################################
                 ### Calcul ratios
@@ -274,12 +271,11 @@ def main():
                 print('-------------')
                 print("ratio_2ap_sol_opt : " , ratio_2ap_sol_opt)
                 print("ratio_2ap_suivi_2_opt_sol_opt : " , ratio_2ap_suivi_2_opt_sol_opt)
-
-
+                '''
 
 
     else:
-            #print("Utilisiation : ", os.path.basename(__file__), " <fichier_test.tsp>")
-            print("Utilisiation : ", os.path.basename(__file__), " <fichier_test.tsp> <cout_optimal_pour_expirements>")
+            print("Utilisiation : ", os.path.basename(__file__), " <fichier_test.tsp>")
+            #print("Utilisiation : ", os.path.basename(__file__), " <fichier_test.tsp> <cout_optimal_pour_expirements>")
 
 main()
